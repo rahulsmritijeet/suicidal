@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700&family=Bebas+Neue&display=swap');
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #ffdde1, #ee9ca7);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.container {
+  text-align: center;
+  padding: 30px;
+  z-index: 2;
+}
+
+h1 { font-size: 2.8rem; }
+h2 { font-size: 1.8rem; }
+
+button {
+  margin: 12px;
+  padding: 14px 30px;
+  font-size: 18px;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff4d6d, #ff758f);
+  color: white;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+button:hover {
+  transform: translateY(-6px) scale(1.06);
+  box-shadow: 0 18px 35px rgba(0,0,0,0.35);
+}
+
+/* Special unlock button */
+.unlock-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  font-size: 22px;
+  padding: 20px 50px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 10px 20px rgba(0,0,0,0.25); }
+  50% { transform: scale(1.08); box-shadow: 0 15px 30px rgba(102,126,234,0.5); }
+}
+
+/* Name animation */
+.name {
+  font-family: 'Pacifico', cursive;
+  font-size: 3.5rem;
+  animation: glow 2s infinite alternate, float 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #fff; }
+  to { text-shadow: 0 0 30px #ff4d6d, 0 0 60px #ff85a1; }
+}
+
+@keyframes float {
+  50% { transform: translateY(-10px); }
+}
+
+/* Text transition */
+.text {
+  opacity: 0;
+  transform: translateY(25px) scale(0.95);
+  animation: textIn 1.2s ease forwards;
+}
+
+@keyframes textIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Floating hearts */
+.heart {
+  position: absolute;
+  bottom: -50px;
+  font-size: 22px;
+  animation: rise linear infinite;
+  opacity: 0.85;
+}
+
+@keyframes rise {
+  to {
+    transform: translateY(-120vh) translateX(40px);
+    opacity: 0;
+  }
+}
+
+/* Confetti */
+.confetti {
+  position: absolute;
+  top: -20px;
+  width: 10px;
+  height: 14px;
+  background-color: red;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Audio icon */
+.audio-icon {
+  font-size: 4rem;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* Warning style */
+.warning {
+  background: linear-gradient(135deg, #ff9a56, #ff6b6b);
+}
+
+/* Story text - emotional styling */
+.story-text {
+  font-size: 2rem;
+  opacity: 0;
+  transform: scale(0.9);
+  animation: storyIn 1.5s ease forwards;
+}
+
+@keyframes storyIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* CONFIDENT TEXT - "ANYWAYS LEAVE IT" */
+.confident-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow: 3px 3px 0px #ff4d6d, 6px 6px 0px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: scale(0.5);
+  animation: confidentIn 0.8s ease forwards;
+}
+
+@keyframes confidentIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="app"></div>
+
+<!-- ========== AUDIO FILES (M4A) ========== -->
+
+<!-- Plays ONCE at start -->
+<audio id="startAudio">
+  <source src="505.m4a" type="audio/x-m4a">
+</audio>
+
+<!-- Plays and LOOPS after start audio ends -->
+
+<audio id="bgMusic" loop>
+  <source src="606.m4a" type="audio/x-m4a">
+</audio>
+
+<audio id="noAudio">
+  <source src="Untitled video - Made with Clipchamp (5).m4a" type="audio/x-m4a">
+</audio>
+
+<audio id="yesAudio">
+  <source src="Untitled video - Made with Clipchamp (4).m4a" type="audio/x-m4a">
+</audio>
+
+<script>
+const app = document.getElementById("app");
+const startAudio = document.getElementById("startAudio");
+const bgMusic = document.getElementById("bgMusic");
+const noAudio = document.getElementById("noAudio");
+const yesAudio = document.getElementById("yesAudio");
+
+// All audio elements for easy control
+const allAudio = [startAudio, bgMusic, noAudio, yesAudio];
+
+// Track NO clicks
+let noClickCount = 0;
+
+/* ========== STOP ALL AUDIO FUNCTION ========== */
+function stopAllAudio() {
+  allAudio.forEach(audio => {
+    audio.pause();
+    audio.currentTime = 0;
+  });
+}
+
+/* ========== PLAY AUDIO (stops others first) ========== */
+function playAudio(audioElement, volume = 0.5) {
+  stopAllAudio();
+  audioElement.volume = volume;
+  audioElement.currentTime = 0;
+  audioElement.play().catch(e => console.log("Audio error:", e));
+}
+
+/* ========== INTRO STORY TEXTS ========== */
+const storyTexts = [
+  { text: "I used to love you 💭", type: "normal" },
+  { text: "I thought you didnt love me 💔", type: "normal" },
+  { text: "I confessed 🥺", type: "normal" },
+  { text: "You rejected and i accepted itt 😔", type: "normal" },
+  { text: "I thought i would move on for sureeeee 🚶", type: "normal" },
+  { text: "ANYWAYS LEAVE IT 😎", type: "confident" }
+];
+
+/* ========== REDUCED LOVE TEXTS (removed 3) ========== */
+const loveTexts = [
+  "Beforee I ask you something really importanttt 💭💖",
+  "I wanted to tell youuu...",
+  "I loveee youur eyesss 👀💘",
+  "I loveee the wayy u smileee 😊",
+  "I loveee howw cutuu you areee 🥹",
+  "I loveee howw caringgg you areee 🤍",
+  "I loveee your laughhhh 😭💗",
+  "I loveee howw you makee me smileee 😚",
+  "I loveee your sillyy sideee 🤪",
+  "I loveee howw speciall you makee me feel 💝",
+  "AND I LLOVVEEEE YOUUU SOOO MUCHHHHH 💘💘💘"
+];
+
+/* ========== UNLOCK AUDIO SCREEN ========== */
+function showUnlock() {
+  app.innerHTML = `
+    <div class="audio-icon">🔇</div>
+    <h1 class="text">Heyyyy! 💖</h1>
+    <h2 class="text">Tap below to start the magic ✨</h2>
+    <button class="unlock-btn" onclick="unlockAudio()">🔊 UNLOCK AUDIO 🔊</button>
+  `;
+}
+
+function unlockAudio() {
+  // Play start audio ONCE
+  startAudio.volume = 0.5;
+  startAudio.currentTime = 0;
+  startAudio.play().catch(e => console.log("Audio error:", e));
+  
+  // When start audio ends, play background music (loops)
+  startAudio.onended = function() {
+    bgMusic.volume = 0.5;
+    bgMusic.currentTime = 0;
+    bgMusic.play().catch(e => console.log("Audio error:", e));
+  };
+  
+  // Start the story sequence
+  showStory();
+}
+
+/* ========== STORY SEQUENCE ========== */
+function showStory() {
+  let i = 0;
+  
+  function displayStory() {
+    const story = storyTexts[i];
+    const className = story.type === "confident" ? "confident-text" : "story-text";
+    app.innerHTML = `<h2 id="storyText" class="${className}">${story.text}</h2>`;
+  }
+  
+  displayStory();
+
+  const interval = setInterval(() => {
+    i++;
+    if (i < storyTexts.length) {
+      displayStory();
+    } else {
+      clearInterval(interval);
+      setTimeout(showMain, 1800);
+    }
+  }, 2000);
+}
+
+/* ========== MAIN SCREEN ========== */
+function showMain() {
+  app.innerHTML = `
+    <h1 class="text">Hiiii <span class="name">Aaarnaaaaa</span> 💖</h1>
+    <button onclick="sayHi()">Hiiiii</button>
+    <button onclick="getLost()">Get lost</button>
+  `;
+}
+
+function getLost() {
+  app.innerHTML = `
+    <h2 class="text">Ayeeeeeee!!???!?! 😭💔<br>Don't youu lobee meee</h2>
+  `;
+  setTimeout(showMain, 2200);
+}
+
+function sayHi() {
+  let i = 0;
+  app.innerHTML = `<h2 id="text" class="text">${loveTexts[i]}</h2>`;
+
+  const interval = setInterval(() => {
+    i++;
+    if (i < loveTexts.length) {
+      const t = document.getElementById("text");
+      t.className = "";
+      void t.offsetWidth;
+      t.innerText = loveTexts[i];
+      t.className = "text";
+    } else {
+      clearInterval(interval);
+      setTimeout(showValentine, 1600);
+    }
+  }, 1900);
+}
+
+/* ========== VALENTINE QUESTION ========== */
+function showValentine() {
+  noClickCount = 0;
+  app.innerHTML = `
+    <h1 class="text">Soooooo will u be my valentines 💝</h1>
+    <button onclick="yes()">YESSS 💖</button>
+    <button onclick="no()">NO 😶</button>
+  `;
+}
+
+/* ========== NO BUTTON LOGIC ========== */
+function no() {
+  noClickCount++;
+  
+  if (noClickCount === 1) {
+    app.innerHTML = `
+      <h2 class="text">Waitttt 🥺💔</h2>
+      <h2 class="text">You can still say YESSS...<br>
+      But if you really want NO...<br>
+      click it again 😢</h2>
+      <button onclick="showValentine()">Okay let me think 💭</button>
+      <button class="warning" onclick="noForReal()">Still NO 😶</button>
+    `;
+  }
+}
+
+function noForReal() {
+  // Stop all, play NO audio ONCE (not looped)
+  stopAllAudio();
+  noAudio.volume = 0.7;
+  noAudio.currentTime = 0;
+  noAudio.play().catch(e => console.log("Audio error:", e));
+  
+  app.innerHTML = `
+    <h2 class="text">Ayeeeee 😡😭<br>
+    theress no option of noooo 😤<br>
+    youu HAVE to sayy yessssss 💢💢💢</h2>
+  `;
+  
+  // When NO audio ends, resume background music
+  noAudio.onended = function() {
+    bgMusic.volume = 0.5;
+    bgMusic.currentTime = 0;
+    bgMusic.play().catch(e => console.log("Audio error:", e));
+    showValentine();
+  };
+}
+
+/* ========== YES BUTTON ========== */
+function yes() {
+  // Stop all, play YES audio ONCE (not looped)
+  stopAllAudio();
+  yesAudio.volume = 0.8;
+  yesAudio.currentTime = 0;
+  yesAudio.play().catch(e => console.log("Audio error:", e));
+  
+  app.innerHTML = `
+    <h1 class="text">🎉🎉🎉 YEAAYAYAYAY 🎉🎉🎉</h1>
+    <h2 class="text">Yeaayayayayaay 😭💖<br>
+    I lovveee youu soo muchhhh 💘💘💘</h2>
+    <h2 class="text">🫶💐🥰✨❤️🎊</h2>
+  `;
+  launchConfetti();
+  
+  // When YES audio ends, resume background music
+  yesAudio.onended = function() {
+    bgMusic.volume = 0.5;
+    bgMusic.currentTime = 0;
+    bgMusic.play().catch(e => console.log("Audio error:", e));
+  };
+}
+
+/* ========== FLOATING HEARTS ========== */
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 8000);
+}, 300);
+
+/* ========== CONFETTI BLAST ========== */
+function launchConfetti() {
+  for (let i = 0; i < 150; i++) {
+    setTimeout(() => {
+      const conf = document.createElement("div");
+      conf.className = "confetti";
+      conf.style.left = Math.random() * 100 + "vw";
+      conf.style.backgroundColor = `hsl(${Math.random()*360},100%,70%)`;
+      conf.style.animationDuration = (3 + Math.random()*3) + "s";
+      document.body.appendChild(conf);
+      setTimeout(() => conf.remove(), 6000);
+    }, i * 30);
+  }
+}
+
+/* ========== START ========== */
+showUnlock();
+</script>
+
+</body>
+</html>
