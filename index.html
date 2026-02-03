@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>RICKROLL</title>
+<title>Valentine 💖</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700&family=Bebas+Neue&display=swap');
@@ -13,12 +13,21 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  background: radial-gradient(circle at top, #ffdde1, #ee9ca7);
+  /* ✨ COTTON CANDY ANIMATED GRADIENT ✨ */
+  background: linear-gradient(-45deg, #ffecd2, #fcb69f, #ff9a9e, #fecfef, #a18cd1, #fbc2eb, #ff9a9e);
+  background-size: 400% 400%;
+  animation: gradientShift 18s ease infinite;
   font-family: 'Poppins', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .container {
@@ -81,6 +90,7 @@ button:hover {
   opacity: 0;
   transform: translateY(25px) scale(0.95);
   animation: textIn 1.2s ease forwards;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
 }
 
 @keyframes textIn {
@@ -104,6 +114,22 @@ button:hover {
     transform: translateY(-120vh) translateX(40px);
     opacity: 0;
   }
+}
+
+/* ✨ SPARKLES ✨ */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: sparkle 2s ease-in-out infinite;
+  box-shadow: 0 0 10px #fff, 0 0 20px #ffc0cb, 0 0 30px #ff69b4;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
 }
 
 /* Confetti */
@@ -145,6 +171,7 @@ button:hover {
   opacity: 0;
   transform: scale(0.9);
   animation: storyIn 1.5s ease forwards;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
 }
 
 @keyframes storyIn {
@@ -187,13 +214,9 @@ button:hover {
 <div class="container" id="app"></div>
 
 <!-- ========== AUDIO FILES (M4A) ========== -->
-
-<!-- Plays ONCE at start -->
 <audio id="startAudio">
   <source src="505.m4a" type="audio/x-m4a">
 </audio>
-
-<!-- Plays and LOOPS after start audio ends -->
 
 <audio id="bgMusic" loop>
   <source src="606.m4a" type="audio/x-m4a">
@@ -214,13 +237,9 @@ const bgMusic = document.getElementById("bgMusic");
 const noAudio = document.getElementById("noAudio");
 const yesAudio = document.getElementById("yesAudio");
 
-// All audio elements for easy control
 const allAudio = [startAudio, bgMusic, noAudio, yesAudio];
-
-// Track NO clicks
 let noClickCount = 0;
 
-/* ========== STOP ALL AUDIO FUNCTION ========== */
 function stopAllAudio() {
   allAudio.forEach(audio => {
     audio.pause();
@@ -228,7 +247,6 @@ function stopAllAudio() {
   });
 }
 
-/* ========== PLAY AUDIO (stops others first) ========== */
 function playAudio(audioElement, volume = 0.5) {
   stopAllAudio();
   audioElement.volume = volume;
@@ -236,7 +254,6 @@ function playAudio(audioElement, volume = 0.5) {
   audioElement.play().catch(e => console.log("Audio error:", e));
 }
 
-/* ========== INTRO STORY TEXTS ========== */
 const storyTexts = [
   { text: "I used to love you 💭", type: "normal" },
   { text: "I thought you didnt love me 💔", type: "normal" },
@@ -246,7 +263,6 @@ const storyTexts = [
   { text: "ANYWAYS LEAVE IT 😎", type: "confident" }
 ];
 
-/* ========== REDUCED LOVE TEXTS (removed 3) ========== */
 const loveTexts = [
   "Beforee I ask you something really importanttt 💭💖",
   "I wanted to tell youuu...",
@@ -261,7 +277,6 @@ const loveTexts = [
   "AND I LLOVVEEEE YOUUU SOOO MUCHHHHH 💘💘💘"
 ];
 
-/* ========== UNLOCK AUDIO SCREEN ========== */
 function showUnlock() {
   app.innerHTML = `
     <div class="audio-icon">🔇</div>
@@ -272,23 +287,19 @@ function showUnlock() {
 }
 
 function unlockAudio() {
-  // Play start audio ONCE
   startAudio.volume = 0.5;
   startAudio.currentTime = 0;
   startAudio.play().catch(e => console.log("Audio error:", e));
   
-  // When start audio ends, play background music (loops)
   startAudio.onended = function() {
     bgMusic.volume = 0.5;
     bgMusic.currentTime = 0;
     bgMusic.play().catch(e => console.log("Audio error:", e));
   };
   
-  // Start the story sequence
   showStory();
 }
 
-/* ========== STORY SEQUENCE ========== */
 function showStory() {
   let i = 0;
   
@@ -311,7 +322,6 @@ function showStory() {
   }, 2000);
 }
 
-/* ========== MAIN SCREEN ========== */
 function showMain() {
   app.innerHTML = `
     <h1 class="text">Hiiii <span class="name">Aaarnaaaaa</span> 💖</h1>
@@ -346,7 +356,6 @@ function sayHi() {
   }, 1900);
 }
 
-/* ========== VALENTINE QUESTION ========== */
 function showValentine() {
   noClickCount = 0;
   app.innerHTML = `
@@ -356,7 +365,6 @@ function showValentine() {
   `;
 }
 
-/* ========== NO BUTTON LOGIC ========== */
 function no() {
   noClickCount++;
   
@@ -373,7 +381,6 @@ function no() {
 }
 
 function noForReal() {
-  // Stop all, play NO audio ONCE (not looped)
   stopAllAudio();
   noAudio.volume = 0.7;
   noAudio.currentTime = 0;
@@ -382,10 +389,9 @@ function noForReal() {
   app.innerHTML = `
     <h2 class="text">OOOF<br>
     i appreciate the fact you saw this websiteee 😤<br>
-    BACK TO BEING FRIENDSSSSS!!! 💢💢💢</h2>
+    BACK TO BEING FRIENDSSSSS!!! </h2>
   `;
   
-  // When NO audio ends, resume background music
   noAudio.onended = function() {
     bgMusic.volume = 0.5;
     bgMusic.currentTime = 0;
@@ -394,9 +400,7 @@ function noForReal() {
   };
 }
 
-/* ========== YES BUTTON ========== */
 function yes() {
-  // Stop all, play YES audio ONCE (not looped)
   stopAllAudio();
   yesAudio.volume = 0.8;
   yesAudio.currentTime = 0;
@@ -410,7 +414,6 @@ function yes() {
   `;
   launchConfetti();
   
-  // When YES audio ends, resume background music
   yesAudio.onended = function() {
     bgMusic.volume = 0.5;
     bgMusic.currentTime = 0;
@@ -422,12 +425,23 @@ function yes() {
 setInterval(() => {
   const heart = document.createElement("div");
   heart.className = "heart";
-  heart.innerHTML = "💖";
+  heart.innerHTML = ["💖", "💕", "💗", "💓", "💘", "✨"][Math.floor(Math.random() * 6)];
   heart.style.left = Math.random() * 100 + "vw";
   heart.style.animationDuration = (4 + Math.random() * 4) + "s";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 8000);
 }, 300);
+
+/* ========== SPARKLES ========== */
+setInterval(() => {
+  const sparkle = document.createElement("div");
+  sparkle.className = "sparkle";
+  sparkle.style.left = Math.random() * 100 + "vw";
+  sparkle.style.top = Math.random() * 100 + "vh";
+  sparkle.style.animationDuration = (1 + Math.random() * 2) + "s";
+  document.body.appendChild(sparkle);
+  setTimeout(() => sparkle.remove(), 3000);
+}, 200);
 
 /* ========== CONFETTI BLAST ========== */
 function launchConfetti() {
@@ -444,11 +458,8 @@ function launchConfetti() {
   }
 }
 
-/* ========== START ========== */
 showUnlock();
 </script>
 
 </body>
 </html>
-
-
